@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zookzevc - EV Charging Simplified</title>
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="{{ url_for('serve_img', filename='logo.png') }}">
+  <link rel="shortcut icon" type="image/png" href="{{ url_for('serve_img', filename='logo.png') }}">
+  <!-- Google Fonts: Inter for clean, modern look -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+    rel="stylesheet">
+  <!-- Font Awesome for Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- Overlay for sidebar -->
+  <div id="sidebar-overlay" class="overlay hidden"></div>
+
+  <!-- Animated Sidebar -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-header">
+      <img src="img/logo.png" alt="Zookzevc" class="logo-img">
+      <button id="close-sidebar" class="icon-btn"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+
+    <div class="sidebar-content">
+      <!-- (Tariff Calculator Moved to Modal) -->
+
+      <!-- Features -->
+      <div class="sidebar-section">
+        <h3><i class="fa-solid fa-star"></i> Station Features</h3>
+        <ul id="features-list" class="animated-list">
+          <li><i class="fa-solid fa-check"></i> Fast DC Charging available</li>
+          <li><i class="fa-solid fa-check"></i> 24/7 Access</li>
+          <li><i class="fa-solid fa-check"></i> Cafe & Restroom nearby</li>
+        </ul>
+      </div>
+
+      <!-- Other Branches -->
+      <div class="sidebar-section">
+        <h3><i class="fa-solid fa-map-location-dot"></i> Other Branches</h3>
+        <ul id="branches-list" class="animated-list">
+          <li>Loading...</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="sidebar-footer">
+      <a href="#" id="whatsapp-support" class="support-btn whatsapp" target="_blank">
+        <i class="fa-brands fa-whatsapp"></i> Instant Support
+      </a>
+      <p id="support-number" class="support-text"><i class="fa-solid fa-phone"></i> Loading...</p>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <main class="main-wrapper">
+
+    <!-- Navigation -->
+    <nav class="navbar">
+      <div class="logo">
+        <a href="index.html"><img src="img/logo.png" alt="Zookzevc" class="logo-img"></a>
+      </div>
+      <div class="nav-actions">
+        <button id="open-sidebar" class="icon-btn nav-menu-btn"><i class="fa-solid fa-bars"></i></button>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+      <div class="hero-content">
+        <h2 class="hero-title">Charge Your EV, <br><span class="gradient-text">Faster & Smarter</span></h2>
+        <p class="hero-subtitle">Find the best charging plans near you.</p>
+
+        <!-- Search Charging Plan -->
+        <div class="glass-search-box" style="margin-bottom: 1.5rem;">
+          <div class="search-input-group">
+            <i class="fa-solid fa-magnifying-glass search-icon"></i>
+            <input type="text" id="search-plan" placeholder="Search charging plan...">
+          </div>
+        </div>
+
+        <button id="open-tariff-modal" class="pay-btn"
+          style="max-width: 250px; margin: 0 auto; display: block; background: var(--accent-color);"><i
+            class="fa-solid fa-calculator"></i> Estimate Cost</button>
+      </div>
+    </section>
+
+    <!-- Dynamic Plans Section -->
+    <section class="plans-section">
+      <div class="section-header">
+        <h3>Available Plans</h3>
+      </div>
+      <div id="plans-container" class="plans-grid">
+        <!-- Plan Cards will be injected here via JS -->
+        <div class="plan-card skeleton"></div>
+        <div class="plan-card skeleton"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Removed Checkout Modal -->
+
+  <!-- Tariff Estimator Modal -->
+  <div id="tariff-modal" class="modal hidden">
+    <div class="modal-content glass-panel">
+      <button id="close-tariff-modal" class="close-modal-btn"><i class="fa-solid fa-xmark"></i></button>
+      <div class="modal-header">
+        <h2>Tariff Estimator</h2>
+        <p>Enter your estimated charging time</p>
+        <div
+          style="background: rgba(0,0,0,0.04); padding: 0.8rem; border-radius: 8px; margin-top: 1rem; display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--glass-border);">
+          <div style="font-size: 0.9rem; color: var(--text-dark); font-weight: 500;">
+            <i class="fa-regular fa-clock" style="color: var(--primary-color);"></i> <span
+              id="current-time-display">--:-- --</span>
+          </div>
+          <div style="text-align: right;">
+            <span
+              style="font-size: 0.75rem; color: var(--text-muted); display: block; text-transform: uppercase; letter-spacing: 0.5px;">Active
+              Rate</span>
+            <strong id="current-rate" style="font-size: 1.1rem; color: var(--accent-color);">₹--/kWh</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-options">
+        <div class="calc-row" style="margin-bottom: 1rem;">
+          <label style="font-weight: 500;">Power (kW):</label>
+          <input type="number" id="calc-kw" value="50" min="1" max="350" step="1" class="modern-input"
+            style="width: 100px; margin-bottom: 0;">
+        </div>
+        <div class="calc-row" style="margin-bottom: 1rem;">
+          <label style="font-weight: 500;">Hours:</label>
+          <input type="number" id="calc-hours" value="0" min="0" max="24" class="modern-input"
+            style="width: 100px; margin-bottom: 0;">
+        </div>
+        <div class="calc-row" style="margin-bottom: 1rem;">
+          <label style="font-weight: 500;">Minutes:</label>
+          <input type="number" id="calc-mins" value="30" min="0" max="59" class="modern-input"
+            style="width: 100px; margin-bottom: 0;">
+        </div>
+
+        <!-- Rate moved to Header -->
+        <div class="calc-result" style="margin-top: 0.5rem; padding-top: 0.5rem;">
+          <span>Est. Cost:</span>
+          <strong id="calc-total">₹0.00</strong>
+        </div>
+        <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 1rem;">*Rate
+          automatically selected based on current time (ToU)</p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Firebase Scripts (Module syntax) -->
+  <script type="module" src="js/main.js"></script>
+</body>
+
+</html>

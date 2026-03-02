@@ -1,0 +1,33 @@
+{
+    "plans": [
+        {
+            "id": "plan_1772418683114",
+            "title": "Remote Sync Test Plan",
+            "price": 99,
+            "unit": "per kWh",
+            "features": [
+                "Server Sync",
+                "Fast"
+            ],
+            "createdAt": "2026-03-02T02:31:23.114Z"
+        }
+    ],
+    "settings": {},
+    "tariffs": {
+        "offPeak": {
+            "end": 6,
+            "rate": 12,
+            "start": 22
+        },
+        "peak": {
+            "end": 22,
+            "rate": 24,
+            "start": 16
+        },
+        "standard": {
+            "end": 16,
+            "rate": 18,
+            "start": 6
+        }
+    }
+}

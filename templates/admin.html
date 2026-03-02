@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Zookzevc</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="{{ url_for('serve_img', filename='logo.png') }}">
+    <link rel="shortcut icon" type="image/png" href="{{ url_for('serve_img', filename='logo.png') }}">
+    <!-- Google Fonts -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap"
+        rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        /* Admin specific styles */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-dark);
+        }
+
+        .admin-nav {
+            background: var(--panel-bg);
+            color: var(--text-dark);
+            padding: 1rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+
+        .admin-nav h1 {
+            color: var(--primary-color);
+            margin: 0;
+        }
+
+        .admin-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 2rem auto;
+            gap: 2rem;
+            padding: 0 5%;
+        }
+
+        .admin-sidebar {
+            width: 250px;
+            background: var(--panel-bg);
+            border-radius: var(--radius-md);
+            padding: 1rem;
+            box-shadow: var(--shadow-sm);
+            height: fit-content;
+            border: 1px solid var(--glass-border);
+        }
+
+        .admin-menu li {
+            list-style: none;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-menu a {
+            display: block;
+            padding: 0.75rem 1rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            border-radius: var(--radius-sm);
+            font-weight: 500;
+        }
+
+        .admin-menu a:hover,
+        .admin-menu a.active {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .admin-content {
+            flex: 1;
+            background: var(--panel-bg);
+            border-radius: var(--radius-md);
+            padding: 2rem;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--glass-border);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .btn-success {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-success:hover {
+            background: #059669;
+        }
+
+        .plan-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border: 1px solid var(--glass-border);
+            margin-bottom: 1rem;
+            border-radius: var(--radius-sm);
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+            padding: 0.5rem 1rem;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+        }
+
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+                gap: 1rem;
+                margin: 1rem auto;
+                padding: 0 1rem;
+            }
+
+            .admin-nav {
+                padding: 1rem;
+                flex-direction: column;
+                gap: 0.5rem;
+                text-align: center;
+            }
+
+            .admin-sidebar {
+                width: 100%;
+                padding: 0.5rem;
+            }
+
+            .admin-menu {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                padding: 0;
+            }
+
+            .admin-menu li {
+                margin-bottom: 0;
+                flex: 1 1 auto;
+            }
+
+            .admin-menu a {
+                padding: 0.5rem;
+                text-align: center;
+                font-size: 0.9rem;
+            }
+
+            .admin-content {
+                padding: 1rem;
+            }
+
+            .form-group div[style*="grid-template-columns"] {
+                grid-template-columns: 1fr !important;
+                gap: 0.75rem !important;
+            }
+
+            .plan-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+
+            .plan-item div:last-child {
+                width: 100%;
+                display: flex;
+                justify-content: flex-end;
+                gap: 0.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="admin-nav">
+        <div class="logo">
+            <a href="admin.html" style="display: flex; align-items: center; gap: 10px; text-decoration: none;">
+                <img src="img/logo.png" alt="Zookzevc" class="logo-img">
+                <span style="font-size: 1rem; font-weight: normal; color: var(--text-dark);">Admin Panel</span>
+            </a>
+        </div>
+        <div class="nav-actions">
+            <!-- Navigation button removed to enforce URL-only typing -->
+        </div>
+    </nav>
+
+    <div class="admin-container">
+
+        <!-- Admin Sidebar -->
+        <aside class="admin-sidebar">
+            <ul class="admin-menu">
+                <li><a href="#" class="active" data-target="manage-plans"><i class="fa-solid fa-list-check"></i>
+                        Charging Plans</a></li>
+                <li><a href="#" data-target="manage-tariffs"><i class="fa-solid fa-clock"></i> Tariff Settings</a></li>
+                <li><a href="#" data-target="manage-sidebar"><i class="fa-solid fa-pen-to-square"></i> Sidebar
+                        Content</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Admin Content Area -->
+        <main class="admin-content">
+
+            <!-- Section: Manage Plans -->
+            <section id="manage-plans" class="admin-section">
+                <h2>Manage Charging Plans</h2>
+                <p class="text-muted">Add or remove charging plans shown on the main page.</p>
+                <hr style="margin: 1rem 0; border: none; border-top: 1px solid var(--glass-border);">
+
+                <div class="form-group">
+                    <h3>Add New Plan</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                        <div>
+                            <label>Plan Title</label>
+                            <input type="text" id="plan-title" class="modern-input" placeholder="e.g. Super Fast DC">
+                        </div>
+                        <div>
+                            <label>Price (₹)</label>
+                            <input type="number" id="plan-price" class="modern-input" placeholder="e.g. 25">
+                        </div>
+                    </div>
+                    <div>
+                        <label>Features (comma separated)</label>
+                        <input type="text" id="plan-features" class="modern-input"
+                            placeholder="e.g. Free Wifi, 150kW+, Priority Support">
+                    </div>
+                    <button id="btn-add-plan" class="auth-btn btn-success" style="width: auto;">Add Plan</button>
+                    <p id="plan-msg" class="auth-msg"></p>
+                </div>
+
+                <div style="margin-top: 2rem;">
+                    <h3>Current Plans</h3>
+                    <div id="admin-plans-list">
+                        <p>Loading plans from database...</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Section: Manage Tariffs -->
+            <section id="manage-tariffs" class="admin-section hidden">
+                <h2>Tariff Settings (Time-of-Use)</h2>
+                <p class="text-muted">Configure the rates and time periods for Off-Peak, Standard, and Peak hours
+                    (24-hour format).</p>
+                <hr style="margin: 1rem 0; border: none; border-top: 1px solid var(--glass-border);">
+
+                <div class="form-group">
+                    <h3 style="color: #10b981; margin-bottom: 0.5rem;">Off-Peak Rate</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div><label>Start Hour</label><select id="offpeak-start"
+                                class="modern-input time-select"></select></div>
+                        <div><label>End Hour</label><select id="offpeak-end" class="modern-input time-select"></select>
+                        </div>
+                        <div><label>Rate (₹/kWh)</label><input type="number" id="offpeak-rate" class="modern-input"
+                                step="0.5"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3 style="color: #f59e0b; margin-bottom: 0.5rem;">Standard Rate</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div><label>Start Hour</label><select id="standard-start"
+                                class="modern-input time-select"></select></div>
+                        <div><label>End Hour</label><select id="standard-end" class="modern-input time-select"></select>
+                        </div>
+                        <div><label>Rate (₹/kWh)</label><input type="number" id="standard-rate" class="modern-input"
+                                step="0.5"></div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h3 style="color: #ef4444; margin-bottom: 0.5rem;">Peak Rate</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem;">
+                        <div><label>Start Hour</label><select id="peak-start" class="modern-input time-select"></select>
+                        </div>
+                        <div><label>End Hour</label><select id="peak-end" class="modern-input time-select"></select>
+                        </div>
+                        <div><label>Rate (₹/kWh)</label><input type="number" id="peak-rate" class="modern-input"
+                                step="0.5"></div>
+                    </div>
+                </div>
+
+                <button id="btn-save-tariffs" class="auth-btn btn-success" style="width: auto;">Save Tariff
+                    Settings</button>
+                <p id="tariff-msg" class="auth-msg"></p>
+            </section>
+
+            <!-- Section: Manage Sidebar Content -->
+            <section id="manage-sidebar" class="admin-section hidden">
+                <h2>Manage Sidebar Content</h2>
+                <p class="text-muted">Update station features, branches, and contact info.</p>
+                <hr style="margin: 1rem 0; border: none; border-top: 1px solid var(--glass-border);">
+
+                <div class="form-group">
+                    <label>Station Features (comma separated)</label>
+                    <input type="text" id="admin-features" class="modern-input" placeholder="e.g. Washroom, Cafe, Wifi">
+                </div>
+
+                <div class="form-group">
+                    <label>Support Phone Number</label>
+                    <input type="text" id="admin-phone" class="modern-input" placeholder="+91 XXXXX XXXXX">
+                </div>
+
+                <div class="form-group">
+                    <label>WhatsApp Link</label>
+                    <input type="url" id="admin-whatsapp" class="modern-input" placeholder="https://wa.me/...">
+                </div>
+
+                <div class="form-group">
+                    <label>Other Branches</label>
+                    <div id="branches-container"
+                        style="display: flex; flex-direction: column; gap: 0.5rem; margin-bottom: 0.5rem;">
+                        <!-- JS will populate branch inputs here -->
+                    </div>
+                    <button type="button" id="btn-add-branch" class="auth-btn btn-success"
+                        style="width: auto; padding: 0.5rem; font-size: 0.9rem;">+ Add Branch</button>
+                </div>
+
+                <button id="btn-save-sidebar" class="auth-btn btn-success" style="width: auto;">Save Changes</button>
+                <p id="sidebar-msg" class="auth-msg"></p>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Admin Login Overlay -->
+    <div id="admin-login-overlay" class="modal">
+        <div class="modal-content glass-panel" style="text-align: center;">
+            <div class="modal-header">
+                <h2>Admin Access</h2>
+                <p>Please enter your credentials.</p>
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label>Username</label>
+                <input type="text" id="admin-username" class="modern-input" placeholder="Enter username">
+            </div>
+            <div class="form-group" style="text-align: left;">
+                <label>Password</label>
+                <div style="position: relative;">
+                    <input type="password" id="admin-password" class="modern-input" placeholder="Enter password"
+                        style="width: 100%; padding-right: 40px;">
+                    <button type="button" id="toggle-password"
+                        style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 0;">
+                        <i class="fa-regular fa-eye"></i>
+                    </button>
+                </div>
+            </div>
+            <button id="btn-admin-login" class="auth-btn primary-btn" style="width: 100%;">Login</button>
+            <p id="admin-login-msg" class="auth-msg"></p>
+        </div>
+    </div>
+
+    <!-- Firebase Scripts (Module syntax) -->
+    <script type="module" src="js/admin.js"></script>
+</body>
+
+</html>
